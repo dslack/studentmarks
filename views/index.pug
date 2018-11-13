@@ -1,0 +1,50 @@
+html
+    head
+        title= Marks
+        style.
+            #data {
+                width:120px;
+            }
+
+            #search {
+                margin-right:5px;
+            }
+            .row {
+                display:flex;
+                margin:5px 0;
+                border-bottom:1px solid #ccc;
+            }
+            .label {
+                flex:1;
+                font-weight:bold;
+
+            }
+        script.
+            window.onload = () => {
+                const inputEl = document.getElementById('studentNumber');
+                document.getElementById('search').addEventListener('click', async ()=> {
+                    const resp = await fetch(`students/${inputEl.value}`);
+                    const data = await resp.json();
+                    renderData(data);
+                });
+            }
+
+            function renderData(data) {
+                const dataEl = document.getElementById('data');
+                let str = [];
+                for (let key in data) {
+                    str.push(`<div class="row">
+                        <div class="label">${key}</div>
+                        <div class="value">${data[key]}</div>
+                    </div>
+                    `)
+                }
+                dataEl.innerHTML = str.join("");
+            }
+    body
+        h1= "StudentMarks"
+        form#studentForm
+            label= "Student Number: "
+            input#studentNumber(type="text", name="studentNumber")
+            button#search(type="button")= "Search Marks"
+        div#data
